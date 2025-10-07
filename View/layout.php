@@ -11,7 +11,7 @@ function MostrarMenu() {
 
     echo '
     <nav class="navbar navbar-expand-lg navbar-dark bg-blue-dark">
-        <div class="container px-5">
+        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
             <a class="navbar-brand" href="/OptiGestion/index.php">Óptica Grisol</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
@@ -24,7 +24,7 @@ function MostrarMenu() {
 
     // controla el usuario no logueado
     if (!$rol) {
-        echo '<li class="nav-item"><a class="nav-link" href="/OptiGestion/view/iniciarSesion.php">Iniciar Sesión</a></li>';
+        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="/OptiGestion/view/iniciarSesion.php">Iniciar Sesión</a></li>';
     }
 
     // este es para el de paciente
@@ -79,7 +79,7 @@ function MostrarMenu() {
     }
 if ($rol) {
         echo '
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown ms-lg-3">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPerfil" role="button" data-bs-toggle="dropdown">
                 Perfil
             </a>
@@ -163,7 +163,7 @@ function IncluirCSS() {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/OptiGestion/assets/css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="/OptiGestion/assets/css/styles.css?v=1.7">
+    <link rel="stylesheet" href="/OptiGestion/assets/css/styles.css?v=2.2">
     
     ';
 }

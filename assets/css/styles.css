@@ -184,19 +184,20 @@ body {
     text-align: right;
     margin-bottom: 0.5rem;
 }
-
-/* Botones de calculadora */
-.calc-btn {
-    flex: 1;
-    margin: 0;
+.appointment-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden; /* Para contener los botones flotantes */
 }
 
-/* Flex para las filas de botones */
-.calc-btn-row {
-    display: flex;
-    gap: 0.25rem;
-    margin-bottom: 0.25rem;
+.agenda-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1.5rem;
 }
+
 
 /* =======================
    Productos

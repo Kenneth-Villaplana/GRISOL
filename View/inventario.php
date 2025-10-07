@@ -1,6 +1,12 @@
 <?php
  include('layout.php'); 
+  include_once __DIR__ . '/../Model/productoModel.php';
+
+$productoFiltro = $_GET['idProducto'] ?? null;
+
+ $listaProductos =ObtenerProductos($productoFiltro);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
  <head>
@@ -17,169 +23,61 @@
  <section class="container my-5 ">
         <div class="d-flex justify-content-between align-items-center mb-4">
        <h2>Inventario de Productos</h2>
-       <a href="agregarProducto.php" class="btn btn-custom"><i class="bi bi-plus-circle"></i>Agregar Producto</a>
+       <a href="agregarProducto.php" class="btn btn-custom">
+        <i class="bi bi-plus-circle"></i>Agregar Producto</a>
 </div>
 
 
-<div class="d-flex justify-content-center">
-  <form class="mb-4 text-center">
-  <label for="cedulaInput" class="form-label">Filtrar por código</label>
-   <input type="text" id="codigoInput" class="form-control" placeholder="5555">   
-</div>
-</form>
+
+<div class="mb-4 d-flex justify-content-center">
+  <form class="filter-form text-center d-flexflex-wrap gap-2" method="GET">
+    <label for="codigoInput" class="form-label">Filtrar por ID</label>
+    <input type="text" id="codigoInput" name="idProducto" class="form-control" placeholder="555">
+    <button type="submit" class="mb-2 my-2 btn btn-custom">Buscar</button>
+   <a href="inventario.php" class="mb-2 my-2 btn btn-outline-secondary mt-2">Limpiar</a>
+  </form>
 </div>
 
 <div class="row" id="listaProductos">
-
-    <div class="col-md-6 mb-4 producto">
+<?php if (!empty($listaProductos)) {
+foreach($listaProductos as $producto){
+    ?>
+  <div class="col-md-6 mb-4 producto">
         <div class="card shadow-sm">
         <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="card-title mb-0"><?php echo $producto['Nombre']; ?></h5>
+ <span class="fw-bold text-primary">₡<?php echo number_format($producto['Precio'], 2); ?></span>
 </div>
-<p class="mb-2">Stock: <strong>0</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-bajo stock-0" role="progressbar">
         
+<p class="mb-2">Stock: <strong><?php echo $producto['Stock']; ?></strong></p>
+<div class="progress mb-3">
+    <div class="progress-bar <?php echo $producto['ColorBarra']; ?>"
+        role= "progressbar"
+        style="width: <?php echo $producto['AnchoBarra']; ?>%;"
+        aria-valuenow="<?php echo $producto['Stock']; ?>"
+        aria-valuemin="0"
+        aria-valuemax="100">
 </div>
 </div>
-<div class="d-flex justify-content-end my-2">
-                        <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                        <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
+
+<div class="d-flex justify-content-end">
+                       <a href="editarproducto.php?id=<?php echo $producto['ProductoId']; ?>" 
+                       class="btn btn-custom me-2">Editar</a>
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
                      </div>
                 </div>
             </div>
         </div>
-    
-
-    <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
+    <?php 
+}
+}else{ ?>
+  <div class="col-12 text-center text-muted">
+  <p>No se encontraron productos</p>
+  </div>
+<?php }
+?>
 </div>
-<p class="mb-2">Stock: <strong>25</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-bajo stock-20" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
-</div>
-<p class="mb-2">Stock: <strong>18</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-bajo stock-18" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
-</div>
-<p class="mb-2">Stock: <strong>12</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-bajo stock-18" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
-</div>
-<p class="mb-2">Stock: <strong>80</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-alto stock-80" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
-</div>
-<p class="mb-2">Stock: <strong>50</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-medio stock-50" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4 producto">
-        <div class="card shadow-sm">
-        <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <h5 class="card-title">Lentes de Sol</h5>
-            <span class="fw-bold"></span>
-</div>
-<p class="mb-2">Stock: <strong>50</strong></p>
-<div class="progress">
-    <div class="progress-bar stock-medio stock-50" role="progressbar">
-        
-</div>
-</div>
-<div class="d-flex justify-content-end my-2">
-                      <a href="editarProducto.php?id=2" class="btn btn-editar btn-custom me-2">Editar</a>
-                      <button class="btn btn-eliminar btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">Eliminar</button>
-                </div>
-            </div>
-        </div>
     </section>
 
     <?php MostrarFooter(); ?>

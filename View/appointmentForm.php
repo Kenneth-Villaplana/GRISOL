@@ -1,5 +1,6 @@
 <?php
  include('layout.php'); 
+  include_once __DIR__ . '/../Controller/usuarioController.php';
 ?>
 
 <!DOCTYPE html>
@@ -20,11 +21,15 @@
       <div class="container" data-aos="fade-up">
          <div class="row justify-content-center">
             <div class="col-md-8"> 
-
-               
                <h4 class="text-center mb-3">Reserve su Cita</h4>
-               <p class="text-center mb-4">Complete el formulario para agendar su cita</p>
-
+               <p class="text-center mb-4">Seleccione fecha y hora de su cita</p>
+                  <?php
+                if(isset($_SESSION["txtMensaje"])){
+                 echo '<div class="alert alert-' . (isset($_SESSION["CambioExitoso"]) ? 'success' : 'danger') . '">' . $_SESSION["txtMensaje"] . '</div>';
+                 unset($_SESSION["txtMensaje"]);   
+                 unset($_SESSION["CambioExitoso"]);        
+          }
+          ?>  
               
                <form action="forms/appointment.php" method="post" role="form" class="php-email-form">
                   <div class="row">

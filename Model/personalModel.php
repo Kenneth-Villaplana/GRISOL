@@ -85,4 +85,6 @@ function EditarPersonalModel($idUsuario, $cedula, $nombre, $apellido, $apellidoD
         return ['resultado' => 0, 'mensaje' => 'Error en el servidor: '.$ex->getMessage()];
     }
 }
+
+?>
 ?>
