@@ -74,6 +74,7 @@ function MostrarMenu() {
                 <li><a class="dropdown-item" href="/OptiGestion/view/reportes.php">Reportes</a></li>
                 <li><a class="dropdown-item" href="/OptiGestion/view/inventario.php">Inventario</a></li>
                 <li><a class="dropdown-item" href="/OptiGestion/view/facturacion.php">Facturación</a></li>
+                <li class="nav-item"><a class="nav-link" href="/OptiGestion/view/historialExpedientes.php">Historial de Expedientes</a></li>
             </ul>
         </li>';
     }
@@ -186,6 +187,7 @@ function IncluirScripts() {
     <script src="/OptiGestion/assets/js/scrollax.min.js"></script>
     <script src="/OptiGestion/assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     ';
 }
 
