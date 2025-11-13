@@ -20,11 +20,20 @@ function MostrarMenu() {
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/OptiGestion/index.php">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="/OptiGestion/view/about.php">Sobre Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/OptiGestion/view/anteojos.php">Anteojos</a></li>';
+                    <li class="nav-item"><a class="nav-link" href="/OptiGestion/view/anteojos.php">Anteojos</a></li>
+                   
+                    ';
 
     // controla el usuario no logueado
     if (!$rol) {
-        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="/OptiGestion/view/iniciarSesion.php">Iniciar Sesión</a></li>';
+        echo '
+        
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item ms-lg-3 me-3"><a class="nav-link" href="/OptiGestion/view/iniciarSesion.php">Iniciar Sesión</a></li> 
+        <a href="https://www.facebook.com/p/Optica-Grisol-100064076650606/?locale=es_LA" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook me-3 text-white""></i></a>
+       
+        <a href="https://www.instagram.com/opticagrisol?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram text-white"></i></a>
+';
     }
 
     // este es para el de paciente
