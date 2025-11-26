@@ -10,18 +10,17 @@ class PacienteModel {
     }
 
     public function buscarPorCedula($cedula) {
-        $sql = "SELECT PacienteId, nombre, apellido, apellidoDos
-                FROM pacientes 
-                WHERE cedula = :cedula";
-        $stmt = $this->db->conectar()->prepare($sql);
+        $dbConn = $this->db->conectar();
+
+        
+        $stmt = $dbConn->prepare("CALL BuscarPacientePorCedulaUsuario(:cedula)");
         $stmt->bindParam(':cedula', $cedula);
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            return null;
-        }
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor(); 
+
+        return $resultado ?: null;
     }
 }
 ?>
