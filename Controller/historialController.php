@@ -1,194 +1,176 @@
 <?php
-include('../Model/baseDatos.php'); // Asegúrate de que la ruta sea correcta
+include_once('../Model/baseDatos.php');
+$conn = AbrirBD();
 
-// 🔹 Si viene la acción para obtener el PacienteId (desde el expediente)
-if (isset($_GET['action']) && $_GET['action'] === 'getPacienteId') {
-    $enlace = AbrirBD();
-    $usuarioId = $_GET['usuarioId'] ?? null;
+function limpiarValorOptico($valor) {
+    if ($valor === "" || $valor === null) return null;
 
-    if (!$usuarioId) {
-        echo json_encode(['success' => false, 'error' => 'Falta el usuarioId']);
-        exit;
-    }
+    // Reemplaza coma por punto por si acaso
+    $valor = str_replace(",", ".", $valor);
 
-    $sql = "SELECT PacienteId FROM Paciente WHERE UsuarioId = ?";
-    $stmt = $enlace->prepare($sql);
-    $stmt->bind_param("i", $usuarioId);
+    // Verifica número válido
+    return is_numeric($valor) ? floatval($valor) : null;
+}
+
+try {
+    // recibe datos del formulario
+
+    $pacienteId = $_POST['PacienteId'] ?? null;
+
+    $ocupacion = $_POST['Ocupacion'] ?? null;
+    $motivoConsulta = $_POST['MotivoConsulta'] ?? null;
+    $usaLentes = $_POST['usaLentes'] ?? 'No';
+    $ultimoControl = $_POST['UltimoControl'] ?? null;
+
+    $antecedente = $_POST['Descripcion'] ?? null;
+
+    $orbitaCejas = $_POST['orbitaCejas'] ?? null;
+    $parpadosPestanas = $_POST['parpadosPestanas'] ?? null;
+    $sistemaLagrimal = $_POST['sistemaLagrimal'] ?? null;
+
+    $descripcionOD = $_POST['DescripcionOD'] ?? null;
+    $descripcionOI = $_POST['DescripcionOI'] ?? null;
+
+    // Ojo Derecho
+    $esferaOD = $_POST['Esfera_OD'] ?? null;
+    $cilindroOD = $_POST['Cilindro_OD'] ?? null;
+    $ejeOD = $_POST['Eje_OD'] ?? null;
+    $dpOD = $_POST['DP_OD'] ?? null;
+    $prismaOD = $_POST['Prisma_OD'] ?? null;
+    $baseOD = $_POST['Base_OD'] ?? null;
+    $avOD = $_POST['AV_OD'] ?? null;
+    $aoOD = $_POST['AO_OD'] ?? null;
+
+    // Ojo Izquierdo
+    $esferaOI = $_POST['Esfera_OI'] ?? null;
+    $cilindroOI = $_POST['Cilindro_OI'] ?? null;
+    $ejeOI = $_POST['Eje_OI'] ?? null;
+    $dpOI = $_POST['DP_OI'] ?? null;
+    $prismaOI = $_POST['Prisma_OI'] ?? null;
+    $baseOI = $_POST['Base_OI'] ?? null;
+    $avOI = $_POST['AV_OI'] ?? null;
+    $aoOI = $_POST['AO_OI'] ?? null;
+
+    $observaciones = $_POST['Observaciones'] ?? null;
+    $altura = $_POST['Altura'] ?? null;
+    $diagnostico = $_POST['Diagnostico'] ?? null;
+
+    //Crear expediente
+    $stmt = $conn->prepare("CALL CrearExpedienteCompleto(?,?,?,?,?)");
+    $stmt->bind_param("issss", $pacienteId, $ocupacion, $motivoConsulta, $usaLentes, $ultimoControl);
     $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
 
-    if ($result) {
-        echo json_encode(['success' => true, 'PacienteId' => $result['PacienteId']]);
-    } else {
-        echo json_encode(['success' => false, 'error' => 'Paciente no encontrado']);
-    }
-
+    $result = $stmt->get_result();
+    $nuevo = $result->fetch_assoc();
+    $nuevoId = $nuevo['IdExpediente'] ?? null;
     $stmt->close();
-    CerrarBD($enlace);
-    exit;
-}
 
-$enlace = AbrirBD();
+    if (!$nuevoId) {
+        throw new Exception("No se pudo obtener el ID del nuevo expediente.");
+    }
 
-// 1️⃣ Validar Paciente
-$pacienteId = $_POST['PacienteId'] ?? null;
-if (!$pacienteId) {
-    die("Error: Paciente no seleccionado. No se puede guardar el expediente.");
-}
-
-// 2️⃣ Datos Generales (permitir campos vacíos)
-$ocupacion = $_POST['Ocupacion'] ?? null;
-$motivoConsulta = $_POST['MotivoConsulta'] ?? null;
-$usaLentes = $_POST['usaLentes'] ?? null;
-$ultimoControl = $_POST['UltimoControl'] ?? null;
-
-// 3️⃣ Guardar Expediente
-$stmt = $enlace->prepare("
-    INSERT INTO Expediente (PacienteId, Ocupacion, MotivoConsulta, UsaLentes, UltimoControl) 
-    VALUES (?, ?, ?, ?, ?)
-");
-$stmt->bind_param("issss", $pacienteId, $ocupacion, $motivoConsulta, $usaLentes, $ultimoControl);
-$stmt->execute();
-$expedienteId = $stmt->insert_id;
-$stmt->close();
-
-// 4️⃣ Guardar Antecedentes (opcional)
-$descripcion = $_POST['Descripcion'] ?? null;
-if ($descripcion) {
-    $stmt = $enlace->prepare("INSERT INTO Antecedente (IdExpediente, Descripcion) VALUES (?, ?)");
-    $stmt->bind_param("is", $expedienteId, $descripcion);
+    // Antecedente
+    $stmt = $conn->prepare("CALL InsertarAntecedente(?,?)");
+    $stmt->bind_param("is", $nuevoId, $antecedente);
     $stmt->execute();
     $stmt->close();
-}
 
-// 5️⃣ Guardar Lensometría
-$lensometria = [
-    'OD' => ['lensometria_od','av_vl_od','add_od','av_vp_od','dp_OD'],
-    'OI' => ['lensometria_oi','av_vl_oi','add_oi','av_vp_oi','dp_oi']
-];
-
-$stmt = $enlace->prepare("
-    INSERT INTO Lensometria (IdExpediente, Ojo, Esfera, Cilindro, Eje, AgudezaVisual) 
-    VALUES (?, ?, ?, ?, ?, ?)
-");
-foreach($lensometria as $ojo => $campos){
-    $esfera = $_POST[$campos[0]] ?? null;
-    $eje = $_POST[$campos[1]] ?? null;
-    $add = $_POST[$campos[2]] ?? null;
-    $av = $_POST[$campos[3]] ?? null;
-    $dp = $_POST[$campos[4]] ?? null;
-
-    $stmt->bind_param("isssss", $expedienteId, $ojo, $esfera, $add, $eje, $av);
-    $stmt->execute();
-}
-$stmt->close();
-
-// 6️⃣ Guardar Agudeza Visual
-$ojos = ['OD','OI','AO'];
-$tipos = ['AV_VL_SC','PH','AV_VP_SC','DISTANCIA_OPTOTIPO'];
-
-$stmt = $enlace->prepare("
-    INSERT INTO AgudezaVisual (IdExpediente, Ojo, Tipo, Valor) 
-    VALUES (?, ?, ?, ?)
-");
-foreach($ojos as $ojo){
-    foreach($tipos as $tipo){
-        $valor = $_POST["{$tipo}_{$ojo}"] ?? null;
-        if($valor !== null && $valor !== ''){
-            $stmt->bind_param("isss", $expedienteId, $ojo, $tipo, $valor);
-            $stmt->execute();
-        }
-    }
-}
-$stmt->close();
-
-// 7️⃣ Examen Externo
-$orbitaCejas = $_POST['orbitaCejas'] ?? null;
-$parpadosPestanas = $_POST['parpadosPestanas'] ?? null;
-$sistemaLagrimal = $_POST['sistemaLagrimal'] ?? null;
-
-$stmt = $enlace->prepare("
-    INSERT INTO ExamenExterno (IdExpediente, orbitaCejas, parpadosPestanas, sistemaLagrimal) 
-    VALUES (?, ?, ?, ?)
-");
-$stmt->bind_param("isss", $expedienteId, $orbitaCejas, $parpadosPestanas, $sistemaLagrimal);
-$stmt->execute();
-$stmt->close();
-
-// 8️⃣ Oftalmoscopia
-$descOD = $_POST['DescripcionOD'] ?? null;
-$descOI = $_POST['DescripcionOI'] ?? null;
-
-$stmt = $enlace->prepare("
-    INSERT INTO Oftalmoscopia (IdExpediente, DescripcionOD, DescripcionOI) 
-    VALUES (?, ?, ?)
-");
-$stmt->bind_param("iss", $expedienteId, $descOD, $descOI);
-$stmt->execute();
-$stmt->close();
-
-// 9️⃣ Examen Final / Fórmula Final
-$ojosExamen = ['OD','OI'];
-$stmt = $enlace->prepare("
-    INSERT INTO ExamenFinal (IdExpediente, Ojo, Esfera, Cilindro, Eje, Adicion, DP, Prisma, Base, AV, AO) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-");
-
-foreach($ojosExamen as $ojo){
-    // Obtener valores del POST, usar string vacío si no existe
-    $esfera = $_POST["Esfera_{$ojo}"] ?? '';
-    $cilindro = $_POST["Cilindro_{$ojo}"] ?? '';
-    $eje = $_POST["Eje_{$ojo}"] ?? '';
-    $adicion = $_POST["Add_{$ojo}"] ?? '';
-    $dp = $_POST["DP_{$ojo}"] ?? '';
-    $prisma = $_POST["Prisma_{$ojo}"] ?? '';
-    $base = $_POST["Base_{$ojo}"] ?? '';
-    $av = $_POST["AV_{$ojo}"] ?? '';
-    $ao = $_POST["AO_{$ojo}"] ?? '';
-
-    // Bind y ejecutar
+    // Lensometría OD
+    $stmt = $conn->prepare("CALL InsertarLensometria(?,?,?,?,?,?)");
+    $ojo = 'Derecho';
     $stmt->bind_param(
-        "issssssssss",
-        $expedienteId,
+        "isddss",
+        $nuevoId,
         $ojo,
-        $esfera,
-        $cilindro,
-        $eje,
-        $adicion,
-        $dp,
-        $prisma,
-        $base,
-        $av,
-        $ao
+        $_POST['lens_esfera_od'],
+        $_POST['lens_cil_od'],
+        $_POST['lens_eje_od'],
+        $_POST['lens_av_od']
     );
     $stmt->execute();
+    $stmt->close();
+
+    // Lensometría OI
+    $stmt = $conn->prepare("CALL InsertarLensometria(?,?,?,?,?,?)");
+    $ojo = 'Izquierdo';
+    $stmt->bind_param(
+        "isddss",
+        $nuevoId,
+        $ojo,
+        $_POST['lens_esfera_oi'],
+        $_POST['lens_cil_oi'],
+        $_POST['lens_eje_oi'],
+        $_POST['lens_av_oi']
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    // Examen externo
+    $stmt = $conn->prepare("CALL InsertarExamenExterno(?,?,?,?)");
+    $stmt->bind_param("isss", $nuevoId, $orbitaCejas, $parpadosPestanas, $sistemaLagrimal);
+    $stmt->execute();
+    $stmt->close();
+
+    // Oftalmoscopía
+    $stmt = $conn->prepare("CALL InsertarOftalmoscopia(?,?,?)");
+    $stmt->bind_param("iss", $nuevoId, $descripcionOD, $descripcionOI);
+    $stmt->execute();
+    $stmt->close();
+
+    // Examen Final OD
+    $stmt = $conn->prepare("CALL InsertarExamenFinal(?,?,?,?,?,?,?,?,?,?,?)");
+    $ojo = 'Derecho';
+    $stmt->bind_param(
+        "isddsdssddd",
+        $nuevoId,
+        $ojo,
+        $esferaOD,
+        $cilindroOD,
+        $ejeOD,
+        $dpOD,      // aquí estás usando DP como "Adición", lo dejamos igual a como lo tenías
+        $dpOD,      // y de nuevo como DP real; no toco esto para no romper nada que ya te funcionaba
+        $prismaOD,
+        $baseOD,
+        $avOD,
+        $aoOD
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    // Examen Final OI
+    $stmt = $conn->prepare("CALL InsertarExamenFinal(?,?,?,?,?,?,?,?,?,?,?)");
+    $ojo = 'Izquierdo';
+    $stmt->bind_param(
+        "isddsdssddd",
+        $nuevoId,
+        $ojo,
+        $esferaOI,
+        $cilindroOI,
+        $ejeOI,
+        $dpOI,
+        $dpOI,
+        $prismaOI,
+        $baseOI,
+        $avOI,
+        $aoOI
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    // Datos adicionales
+    $stmt = $conn->prepare("CALL InsertarDatosAdicionales(?,?,?,?)");
+    $stmt->bind_param("isss", $nuevoId, $observaciones, $altura, $diagnostico);
+    $stmt->execute();
+    $stmt->close();
+
+    // REDIRECCIÓN FINAL
+    CerrarBD($conn);
+    header("Location: ../Controller/historialExpedientePacienteController.php?PacienteId=$pacienteId");
+    exit;
+
+} catch (Exception $e) {
+    if (isset($stmt))
+        $stmt->close();
+    CerrarBD($conn);
+    die("<h3 style='color:red;'>❌ Error al ejecutar SP:</h3> " . $e->getMessage());
 }
-
-$stmt->close();
-
-// 10️⃣ Datos Adicionales
-$observaciones = $_POST['Observaciones'] ?? null;
-$altura = $_POST['Altura'] ?? null;
-$diagnostico = $_POST['Diagnostico'] ?? null;
-
-$stmt = $enlace->prepare("
-    INSERT INTO DatosAdicionales (IdExpediente, Observaciones, Altura, Diagnostico) 
-    VALUES (?, ?, ?, ?)
-");
-$stmt->bind_param("isss", $expedienteId, $observaciones, $altura, $diagnostico);
-$stmt->execute();
-$stmt->close();
-
-// Cerrar conexión
-CerrarBD($enlace);
-
-// Verificamos si se insertó correctamente el expediente
-if ($expedienteId > 0) {
-    header("Location: ../View/historialExpedientes.php?mensaje=exito");
-} else {
-    header("Location: ../View/historialExpedientes.php?mensaje=error");
-}
-exit;
-
-
-?>

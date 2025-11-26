@@ -1,4 +1,8 @@
 <?php
+if (isset($_GET['mensaje']) && $_GET['mensaje'] === 'exito') {
+    echo '<div class="alert alert-success text-center">✅ El expediente se ha creado correctamente.</div>';
+}
+
 include('layout.php');
 ?>
 
@@ -17,7 +21,24 @@ include('layout.php');
 
     <main class="container my-5">
 
-        <!-- Banner superior -->
+        <?php if (isset($_SESSION['mensajeInfo'])): ?>
+            <div class="alert alert-warning text-center">
+                <?= $_SESSION['mensajeInfo']; ?>
+            </div>
+            <?php unset($_SESSION['mensajeInfo']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['mensajeError'])): ?>
+            <div class="alert alert-danger text-center">
+                <?= $_SESSION['mensajeError']; ?>
+            </div>
+            <?php unset($_SESSION['mensajeError']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['mensaje']) && $_GET['mensaje'] === 'actualizado'): ?>
+            <div class="alert alert-success text-center">✅ El expediente se actualizó correctamente.</div>
+        <?php endif; ?>
+
         <div class="banner-expediente">
             <div class="banner-text">
                 <h2><i class="bi bi-folder2-open"></i> Historial de Expedientes Digitales</h2>
@@ -40,9 +61,6 @@ include('layout.php');
                         <a id="btnAgregarExpediente" class="btn btn-primary mb-2" style="display:none;">
                             <i class="bi bi-plus-square"></i> Agregar Expediente
                         </a>
-                        <a id="btnVerUltimo" class="btn btn-outline-info mb-2" style="display:none;">
-                            <i class="bi bi-journal-text"></i> Ver Último Expediente Digital
-                        </a>
                         <a id="btnHistorial" class="btn btn-outline-secondary mb-2" style="display:none;">
                             <i class="bi bi-clock-history"></i> Historial Clínico
                         </a>
@@ -56,100 +74,96 @@ include('layout.php');
     <?php MostrarFooter(); ?>
     <?php IncluirScripts(); ?>
 
-   <script>
-    // FUNCION GLOBAL
-    async function buscarPaciente() {
-        const cedula = document.getElementById('cedula').value.trim();
-        const resultadoDiv = document.getElementById('resultado');
-        const btnAgregar = document.getElementById('btnAgregarExpediente');
-        const btnUltimo = document.getElementById('btnVerUltimo');
-        const btnHistorial = document.getElementById('btnHistorial');
+    <script>
+        // FUNCIÓN PRINCIPAL: Buscar paciente por cédula
+        async function buscarPaciente() {
+            const cedula = document.getElementById('cedula').value.trim();
+            const resultadoDiv = document.getElementById('resultado');
+            const btnAgregar = document.getElementById('btnAgregarExpediente');
+            const btnHistorial = document.getElementById('btnHistorial');
 
-        // Ocultar botones antes de mostrar resultado
-        btnAgregar.style.display = 'none';
-        btnUltimo.style.display = 'none';
-        btnHistorial.style.display = 'none';
-        resultadoDiv.innerHTML = '';
+            // Ocultar botones antes de mostrar resultado
+            btnAgregar.style.display = 'none';
+            btnHistorial.style.display = 'none';
+            resultadoDiv.innerHTML = '';
 
-        if (!cedula) {
-            alert("Por favor ingrese una cédula.");
-            return;
-        }
-
-        try {
-            const response = await fetch('../Controller/pacienteController.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'cedula=' + encodeURIComponent(cedula)
-            });
-
-            const data = await response.json();
-
-            // Escenario 3: Paciente no encontrado
-            if (data.error) {
-                resultadoDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>
-                    <a href="RegistrarPaciente.php" class="btn btn-success mt-2">Registrar Paciente</a>`;
-                    
+            if (!cedula) {
+                alert("Por favor ingrese una cédula.");
                 return;
             }
 
-            // Escenario 1: Paciente encontrado
-            if (data.PacienteId) {
-                resultadoDiv.innerHTML = `<div class="alert alert-success">
-                    <strong>Nombre:</strong> ${data.nombre} ${data.apellido} ${data.apellidoDos}<br>
-                    <strong>Teléfono:</strong> ${data.telefono ?? ''}<br>
-                    <strong>Dirección:</strong> ${data.direccion ?? ''}
-                </div>`;
+            try {
+                const response = await fetch('../Controller/pacienteController.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'cedula=' + encodeURIComponent(cedula)
+                });
 
-                sessionStorage.setItem('paciente', JSON.stringify(data));
+                const data = await response.json();
 
-                btnAgregar.href = 'expedienteDigital.php';
-                btnAgregar.style.display = 'block';
-                btnUltimo.href = `ultimoExpediente.php?PacienteId=${data.PacienteId}`;
-                btnUltimo.style.display = 'block';
-                btnHistorial.href = `historialExpedientePaciente.php?PacienteId=${data.PacienteId}`;
-                btnHistorial.style.display = 'block';
-            }
+                // Paciente no encontrado
+                if (data.error) {
+                    resultadoDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>
+                    <a href="RegistrarPaciente.php" class="btn btn-success mt-2">Registrar Paciente</a>`;
+                    return;
+                }
 
-            // Escenario 2: Usuario existe pero no paciente
-            else if (data.UsuarioId) {
-                resultadoDiv.innerHTML = `<div class="alert alert-warning">Usuario registrado pero sin paciente asociado.</div>`;
+                // Paciente encontrado
+                if (data.PacienteId) {
+                    resultadoDiv.innerHTML = `<div class="alert alert-success">
+                        <strong>Nombre:</strong> ${data.nombre} ${data.apellido} ${data.apellidoDos}<br>
+                        <strong>Teléfono:</strong> ${data.telefono ?? ''}<br>
+                        <strong>Dirección:</strong> ${data.direccion ?? ''}
+                    </div>`;
 
-                btnAgregar.onclick = async (e) => {
-                    e.preventDefault();
-                    try {
-                        const res = await fetch('../Controller/pacienteController.php?action=crearPaciente', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: 'UsuarioId=' + data.UsuarioId
-                        });
-                        const newData = await res.json();
-                        if (newData.success) {
-                            sessionStorage.setItem('paciente', JSON.stringify({
-                                PacienteId: newData.PacienteId,
-                                nombre: data.nombre,
-                                apellido: data.apellido,
-                                apellidoDos: data.apellidoDos
-                            }));
-                            window.location.href = 'expedienteDigital.php?PacienteId=' + newData.PacienteId;
-                        } else {
+                    // Guardar en sessionStorage
+                    sessionStorage.setItem('paciente', JSON.stringify(data));
+
+                    // Mostrar botones funcionales
+                    btnAgregar.href = 'expedienteDigital.php';
+                    btnAgregar.style.display = 'block';
+                    btnHistorial.href = `../Controller/historialExpedientePacienteController.php?PacienteId=${data.PacienteId}`;
+                    btnHistorial.style.display = 'block';
+                }
+
+                // Usuario existe pero no paciente
+                else if (data.UsuarioId) {
+                    resultadoDiv.innerHTML = `<div class="alert alert-warning">Usuario registrado pero sin paciente asociado.</div>`;
+
+                    btnAgregar.onclick = async (e) => {
+                        e.preventDefault();
+                        try {
+                            const res = await fetch('../Controller/pacienteController.php?action=crearPaciente', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: 'UsuarioId=' + data.UsuarioId
+                            });
+                            const newData = await res.json();
+                            if (newData.success) {
+                                sessionStorage.setItem('paciente', JSON.stringify({
+                                    PacienteId: newData.PacienteId,
+                                    nombre: data.nombre,
+                                    apellido: data.apellido,
+                                    apellidoDos: data.apellidoDos
+                                }));
+                                window.location.href = 'expedienteDigital.php?PacienteId=' + newData.PacienteId;
+                            } else {
+                                alert("Error al crear paciente.");
+                            }
+                        } catch (err) {
+                            console.error(err);
                             alert("Error al crear paciente.");
                         }
-                    } catch (err) {
-                        console.error(err);
-                        alert("Error al crear paciente.");
-                    }
-                };
-                btnAgregar.style.display = 'block';
-            }
+                    };
+                    btnAgregar.style.display = 'block';
+                }
 
-        } catch (err) {
-            console.error(err);
-            alert("Ocurrió un error al buscar el paciente.");
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error al buscar el paciente.");
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
-
 </html>
