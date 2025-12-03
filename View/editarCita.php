@@ -267,6 +267,16 @@ CerrarBD($conn);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transform: translateY(-2px);
         }
+        .cita-pasada {
+            opacity: 0.7;
+            background-color: #f8f9fa;
+            border-color: #e9ecef;
+        }
+        .cita-pasada:hover {
+            opacity: 0.8;
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
         .cita-header {
             display: flex;
             justify-content: space-between;
@@ -284,6 +294,7 @@ CerrarBD($conn);
         .estado-completada { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .estado-cancelada { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .estado-reagendada { background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        .estado-pasada { background-color: #e9ecef; color: #6c757d; border: 1px solid #dee2e6; }
         .cita-info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -508,9 +519,17 @@ CerrarBD($conn);
                         $fechaParaInput = $fechaHora->format('Y-m-d');
                         $horaParaInput = $fechaHora->format('H:i');
                         
+                        // Determinar si la cita ya pasó
+                        $ahora = new DateTime();
+                        $citaPasada = $fechaHora < $ahora;
+                        
                         $puedeModificar = in_array($cita['Estado'], ['pendiente', 'confirmada']);
+                        // Si la cita ya pasó, no se puede modificar aunque esté pendiente/confirmada
+                        if ($citaPasada) {
+                            $puedeModificar = false;
+                        }
                     ?>
-                        <div class="cita-card">
+                        <div class="cita-card <?php echo $citaPasada ? 'cita-pasada' : ''; ?>">
                             <div class="cita-header">
                                 <div>
                                     <h5 class="fw-bold mb-1"><?php echo htmlspecialchars($cita['Nombre']); ?></h5>
@@ -519,9 +538,12 @@ CerrarBD($conn);
                                         <?php if ($_SESSION['RolID'] !== 'Paciente' && !empty($cita['PacienteNombre'])): ?>
                                             | Paciente: <?php echo htmlspecialchars($cita['PacienteNombre']); ?>
                                         <?php endif; ?>
+                                        <?php if ($citaPasada): ?>
+                                            | <span class="text-muted"><i class="fas fa-clock me-1"></i>Cita pasada</span>
+                                        <?php endif; ?>
                                     </p>
                                 </div>
-                                <span class="estado-badge estado-<?php echo strtolower($cita['Estado']); ?>">
+                                <span class="estado-badge estado-<?php echo strtolower($cita['Estado']); ?> <?php echo $citaPasada ? 'estado-pasada' : ''; ?>">
                                     <?php echo ucfirst($cita['Estado']); ?>
                                 </span>
                             </div>
@@ -532,6 +554,9 @@ CerrarBD($conn);
                                     <div>
                                         <strong>Fecha:</strong><br>
                                         <?php echo $fechaFormateada; ?>
+                                        <?php if ($citaPasada): ?>
+                                            <br><small class="text-muted"><i class="fas fa-history me-1"></i>Pasada</small>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="info-item">
@@ -600,7 +625,11 @@ CerrarBD($conn);
                                 <div class="mt-3 pt-3 border-top">
                                     <small class="text-muted">
                                         <i class="fas fa-info-circle me-1"></i>
-                                        Esta cita no se puede modificar en su estado actual.
+                                        <?php if ($citaPasada): ?>
+                                            Esta cita ya pasó y no se puede modificar.
+                                        <?php else: ?>
+                                            Esta cita no se puede modificar en su estado actual.
+                                        <?php endif; ?>
                                     </small>
                                 </div>
                             <?php endif; ?>
