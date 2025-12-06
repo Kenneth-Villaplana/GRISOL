@@ -26,7 +26,7 @@
                         <div class="row text-center mb-5">
                             <div class="col-md-4 mb-5">
                                 <h5 class="fw-bold">Sucursales</h5>
-                                    <a href="https://opticasvitra.com/ubicaciones/" class="text-dark text-decoration-none">Ver ubicaciones</a>
+                                    <a href="grisolcr.lat" class="text-dark text-decoration-none">Ver ubicaciones</a>
                                </div>
                                <div class="col-md-4 mb-4">
                                 <h5 class="fw-bold">Redes Sociales</h5>

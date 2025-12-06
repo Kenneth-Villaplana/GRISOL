@@ -1,6 +1,5 @@
 <?php
- include('view/layout.php');
- 
+require_once __DIR__ . '/View/layout.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,11 +10,12 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Óptica Grisol</title>
-   <?php IncluirCSS();?>
+   <?php IncluirCSS(); ?>
 </head>
-    <body>
-       <?php MostrarMenu();?>
-        
+<body>
+
+<?php MostrarMenu(); ?>
+
 <header class="hero-home">
     <div class="hero-overlay"></div>
 
@@ -25,15 +25,13 @@
             En Óptica Grisol combinamos tecnología, salud visual y estilo para brindarte la mejor experiencia.
         </p>
 
-        
-        <a href="/OptiGestion/View/RegistrarPaciente.php" class="btn-cta-agendar mt-3">
+        <a href="/View/RegistrarPaciente.php" class="btn-cta-agendar mt-3">
             Agendar Cita
         </a>
     </div>
-
 </header>
-            
-            <section class="py-5">
+
+<section class="py-5">
     <div class="container px-4">
         <h2 class="text-center fw-bold mb-5">Mejor forma de cuidar tu vista</h2>
 
@@ -102,15 +100,15 @@
         <div class="carousel-inner">
 
             <div class="carousel-item active">
-                <img src="/OptiGestion/assets/img/carrusel1.jpg" class="d-block w-100 img-carrusel-small">
+                <img src="/assets/img/carrusel1.jpg" class="d-block w-100 img-carrusel-small">
             </div>
 
             <div class="carousel-item">
-                <img src="/OptiGestion/assets/img/prueba2.jpg" class="d-block w-100 img-carrusel-small">
+                <img src="/assets/img/prueba2.jpg" class="d-block w-100 img-carrusel-small">
             </div>
 
             <div class="carousel-item">
-                <img src="/OptiGestion/assets/img/ejemplo.jpg" class="d-block w-100 img-carrusel-small">
+                <img src="/assets/img/ejemplo.jpg" class="d-block w-100 img-carrusel-small">
             </div>
 
         </div>
@@ -119,23 +117,6 @@
 </div>
 </section>
 
-<!-- NEWSLETTER 
-<aside class="bg-blue-dark bg-gradient rounded-3 p-4 p-sm-5 my-5">
-    <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
-        <div class="mb-4 mb-xl-0">
-            <div class="fs-3 fw-bold text-white">Noticias de promociones</div>
-            <div class="text-white">Registre su correo para recibir promociones</div>
-        </div>
-        <div class="ms-xl-4">
-            <div class="input-group mb-2">
-                <input class="form-control" type="text" placeholder="Correo Electrónico" />
-                <button class="btn btn-custom" type="button">Registrarse</button>
-            </div>
-            <div class="small text-white">Nos preocupamos por su privacidad.</div>
-        </div>
-    </div>
-</aside>
--->
 <?php MostrarFooter(); ?>
 <?php IncluirScripts(); ?>
 
