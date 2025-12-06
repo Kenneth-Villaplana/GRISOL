@@ -29,7 +29,7 @@
         <div class="row gx-5 align-items-center">
             <div class="col-lg-6 mb-4">
                 <div class="about-img-wrapper">
-                    <img class="img-fluid rounded-4" src="/OptiGestion/assets/img/AboutUS.jpg" alt="Sobre nosotros">
+                    <img class="img-fluid rounded-4" src="/assets/img/AboutUS.jpg" alt="Sobre nosotros">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
 
             <div class="col-lg-6 mb-4 order-first order-lg-last">
                 <div class="about-img-wrapper">
-                    <img class="img-fluid rounded-4" src="/OptiGestion/assets/img/AboutUS3.jpg" alt="Productos">
+                    <img class="img-fluid rounded-4" src="/assets/img/AboutUS3.jpg" alt="Productos">
                 </div>
             </div>
 
