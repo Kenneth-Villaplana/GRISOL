@@ -1,0 +1,19 @@
+# Azure App Service URL Rewriting
+RewriteEngine On
+
+# If requested file or directory exists, serve it
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise, route everything to index.php
+RewriteRule ^ index.php [QSA,L]
+
+# Security: Disable directory listing
+Options -Indexes
+
+# Prevent access to .htaccess
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
