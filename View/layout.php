@@ -138,28 +138,28 @@ function IncluirCSS() {
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
-    <link rel="stylesheet" href="/OptiGestion/assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/OptiGestion/assets/vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="/OptiGestion/assets/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.min.css">
     
-    <link rel="stylesheet" href="/OptiGestion/assets/vendor/glightbox/css/glightbox.min.css">
-    <link rel="stylesheet" href="/OptiGestion/assets/vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="/OptiGestion/assets/css/styles.css?v=5.8">
+    <link rel="stylesheet" href="/assets/vendor/glightbox/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/vendor/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=5.8">
     <link rel="icon" type="image/x-icon" href="/OptiGestion/assets/favicon.ico">
     ';
 }
 
 function IncluirScripts() {
     echo '
-    <script src="/OptiGestion/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/OptiGestion/assets/vendor/aos/aos.js"></script>
-    <script src="/OptiGestion/assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="/OptiGestion/assets/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="/OptiGestion/assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="/OptiGestion/assets/vendor/php-email-form/validate.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/assets/vendor/php-email-form/validate.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/OptiGestion/assets/js/registro.js"></script>
-    <script src="/OptiGestion/assets/js/scripts.js"></script>
+    <script src="/assets/js/registro.js"></script>
+    <script src="/assets/js/scripts.js"></script>
    
   
     ';
