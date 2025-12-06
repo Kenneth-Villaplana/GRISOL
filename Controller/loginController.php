@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/Model/loginModel.php';
+include_once __DIR__ . '/../Model/loginModel.php';
 //include_once __DIR__ . '/../Model/usuarioModel.php';
 
 
@@ -11,7 +11,7 @@ if(session_status() == PHP_SESSION_NONE) {
 if(isset($_GET["cerrarSesion"])) {
     $_SESSION = array();
     session_destroy();
-    header('Location: /OptiGestion/View/iniciarSesion.php');
+    header('Location: /View/iniciarSesion.php');
     exit();
 }
 

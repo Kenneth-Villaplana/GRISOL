@@ -4,7 +4,7 @@ if(session_status() == PHP_SESSION_NONE) {
 }
 
     include_once 'layout.php';
-  include_once __DIR__ . '/Controller/loginController.php';
+  include_once __DIR__ . '/../Controller/loginController.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
