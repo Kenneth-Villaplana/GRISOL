@@ -4,6 +4,16 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Configuración para Azure Web App
+define('BASE_URL', '/');
+define('ASSETS_PATH', '/assets/');
+define('VIEW_PATH', '/View/');
+
+function getBasePath($path = '') {
+    // Para Azure, siempre usar rutas absolutas desde la raíz
+    return BASE_URL . ltrim($path, '/');
+}
+
 function MostrarMenu() {
     $rol = $_SESSION['RolID'] ?? null;
     $EmpleadoRol = $_SESSION['EmpleadoRol'] ?? null;
@@ -11,19 +21,19 @@ function MostrarMenu() {
     echo '
     <nav class="navbar navbar-expand-lg navbar-dark bg-blue-dark">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="index.php">Óptica Grisol</a>
+            <a class="navbar-brand" href="' . getBasePath('index.php') . '">Óptica Grisol</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-                    <li class="nav-item"><a class="nav-link" href="/index.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/View/about.php">Sobre Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/View/anteojos.php">Anteojos</a></li>';
+                    <li class="nav-item"><a class="nav-link" href="' . getBasePath('index.php') . '">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . getBasePath(VIEW_PATH . 'about.php') . '">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . getBasePath(VIEW_PATH . 'anteojos.php') . '">Anteojos</a></li>';
 
     if (!$rol) {
-        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="/View/iniciarSesion.php">Iniciar Sesión</a></li>';
+        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="' . getBasePath(VIEW_PATH . 'iniciarSesion.php') . '">Iniciar Sesión</a></li>';
     } 
     else if ($rol === 'Paciente') {
         echo '
@@ -32,14 +42,13 @@ function MostrarMenu() {
                 Citas
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownCitas">
-                <li><a class="dropdown-item" href="/View/appointmentForm.php">Agendar Cita</a></li>
-                <li><a class="dropdown-item" href="/View/editarcita.php">Mis Citas</a></li>
-                <li><a class="dropdown-item" href="/View/historialMedico.php">Historial Médico</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'appointmentForm.php') . '">Agendar Cita</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'editarcita.php') . '">Mis Citas</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'historialMedico.php') . '">Historial Médico</a></li>
             </ul>
         </li>';
     } 
     else if ($rol === 'Empleado') {
-
         if ($EmpleadoRol == 1) {
             echo ' 
             <li class="nav-item dropdown">
@@ -47,7 +56,7 @@ function MostrarMenu() {
                     Personal
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPersonal">
-                    <li><a class="dropdown-item" href="/View/personal.php">Ver Personal</a></li>
+                    <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'personal.php') . '">Ver Personal</a></li>
                 </ul>
             </li>';
         }
@@ -58,11 +67,11 @@ function MostrarMenu() {
                 Administración
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAdmin">
-                <li><a class="dropdown-item" href="/View/reportes.php">Reportes</a></li>
-                <li><a class="dropdown-item" href="/View/inventario.php">Inventario</a></li>
-                <li><a class="dropdown-item" href="/View/facturacion.php">Facturación</a></li>
-                <li><a class="dropdown-item" href="/View/historialExpedientes.php">Historial de Expedientes</a></li>
-                <li><a class="dropdown-item" href="/View/editarcita.php">Manipular Citas</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'reportes.php') . '">Reportes</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'inventario.php') . '">Inventario</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'facturacion.php') . '">Facturación</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'historialExpedientes.php') . '">Historial de Expedientes</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'editarcita.php') . '">Gestión de Citas</a></li>
             </ul>
         </li>';
     }
@@ -74,8 +83,9 @@ function MostrarMenu() {
                 Perfil
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPerfil">
-                <li><a class="dropdown-item" href="/View/editarPerfil.php">Editar Perfil</a></li>
-                <li><a class="dropdown-item" href="/logout.php">Cerrar Sesión</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'editarPerfil.php') . '">Editar Perfil</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath(VIEW_PATH . 'editarcita.php') . '">Mis Citas</a></li>
+                <li><a class="dropdown-item" href="' . getBasePath('logout.php') . '">Cerrar Sesión</a></li>
             </ul>
         </li>';
     }
@@ -138,31 +148,29 @@ function MostrarFooter() {
 
 function IncluirCSS() {
     echo '
-
     <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
-
-    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/assets/vendor/glightbox/css/glightbox.min.css">
-    <link rel="stylesheet" href="/assets/vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.css?v=5.8">
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'vendor/glightbox/css/glightbox.min.css">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'vendor/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="' . ASSETS_PATH . 'css/styles.css?v=5.8">
+    <link rel="icon" type="image/x-icon" href="' . ASSETS_PATH . 'favicon.ico">
     ';
 }
 
 function IncluirScripts() {
     echo '
-    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/vendor/aos/aos.js"></script>
-    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="/assets/vendor/php-email-form/validate.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/aos/aos.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="' . ASSETS_PATH . 'vendor/php-email-form/validate.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/registro.js"></script>
-    <script src="/assets/js/scripts.js"></script>
+    <script src="' . ASSETS_PATH . 'js/registro.js"></script>
+    <script src="' . ASSETS_PATH . 'js/scripts.js"></script>
     ';
 }
 
