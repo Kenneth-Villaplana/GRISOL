@@ -1,8 +1,8 @@
 <?php
 session_start();
 include('layout.php');
-include_once __DIR__ . '/../Model/baseDatos.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__ . '/Model/baseDatos.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // Verificar si el usuario está loggeado
 if (!isset($_SESSION['UsuarioID'])) {
@@ -11,7 +11,7 @@ if (!isset($_SESSION['UsuarioID'])) {
 }
 
 // INCLUIR LOS MODELOS NECESARIOS
-require_once __DIR__ . '/../Model/GoogleCalendarModel.php';
+require_once __DIR__ . '/Model/GoogleCalendarModel.php';
 
 $usuarioId = $_SESSION['UsuarioID'];
 $mensajeExito = '';
@@ -232,7 +232,7 @@ CerrarBD($conn);
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="/OptiGestion/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <style>
         :root {
             --verde-primario: #28a745;
