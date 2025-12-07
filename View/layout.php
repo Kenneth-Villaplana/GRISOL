@@ -34,7 +34,7 @@ function MostrarMenu() {
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownCitas">
                 <li><a class="dropdown-item" href="/View/appointmentForm.php">Agendar Cita</a></li>
                 <li><a class="dropdown-item" href="/View/historialMedico.php">Historial Médico</a></li>
-                <li><a class="dropdown-item" href="/citaedit.php">Mis Citas</a></li>                
+                <li><a class="dropdown-item" href="/View/citaedit.php">Mis Citas</a></li>                
             </ul>
         </li>';
     } 
@@ -62,7 +62,7 @@ function MostrarMenu() {
                 <li><a class="dropdown-item" href="/View/inventario.php">Inventario</a></li>
                 <li><a class="dropdown-item" href="/View/facturacion.php">Facturación</a></li>
                 <li><a class="dropdown-item" href="/View/historialExpedientes.php">Historial de Expedientes</a></li>
-                <li><a class="dropdown-item" href="/citaedit.php">Manipular Citas</a></li>
+                <li><a class="dropdown-item" href="/View/citaedit.php">Manipular Citas</a></li>
             </ul>
         </li>';
     }
