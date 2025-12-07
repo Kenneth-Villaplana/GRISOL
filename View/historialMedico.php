@@ -1,6 +1,15 @@
 
 <?php
- include('layout.php')
+ session_start();
+include('layout.php');
+include_once __DIR__ . '/../Model/baseDatos.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Verificar si el usuario está loggeado
+if (!isset($_SESSION['UsuarioID'])) {
+    header('Location: /login');
+    exit;
+}
  
 ?>
 

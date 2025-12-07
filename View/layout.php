@@ -33,7 +33,7 @@ function MostrarMenu() {
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownCitas">
                 <li><a class="dropdown-item" href="/View/appointmentForm.php">Agendar Cita</a></li>
-                <li><a class="dropdown-item" href="/View/editarcita.php">Mis Citas</a></li>
+                <li><a class="dropdown-item" href="/View/editarCita.php">Mis Citas</a></li>
                 <li><a class="dropdown-item" href="/View/historialMedico.php">Historial Médico</a></li>
             </ul>
         </li>';
