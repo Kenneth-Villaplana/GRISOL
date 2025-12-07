@@ -3,23 +3,45 @@ include_once __DIR__ . '/../Model/baseDatos.php';
 
 class PacienteModel {
 
-    private $db;
-
-    public function __construct() {
-        $this->db = new BaseDatos();
-    }
-
     public function buscarPorCedula($cedula) {
-        $dbConn = $this->db->conectar();
+        // Abrir conexión (mysqli)
+        $dbConn = AbrirBD();
 
-        
-        $stmt = $dbConn->prepare("CALL BuscarPacientePorCedulaUsuario(:cedula)");
-        $stmt->bindParam(':cedula', $cedula);
-        $stmt->execute();
+        // Usamos un procedimiento almacenado con mysqli
+        $stmt = $dbConn->prepare("CALL BuscarPacientePorCedulaUsuario(?)");
+        if (!$stmt) {
+            // Opcional: logging de error
+            error_log("Error en prepare: " . $dbConn->error);
+            return null;
+        }
 
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor(); 
+        // Vincular parámetro
+        $stmt->bind_param("s", $cedula); // "s" = string
 
+        // Ejecutar
+        if (!$stmt->execute()) {
+            error_log("Error en execute: " . $stmt->error);
+            $stmt->close();
+            CerrarBD($dbConn);
+            return null;
+        }
+
+        // Obtener resultado
+        $resultado = null;
+        $res = $stmt->get_result();
+        if ($res) {
+            $fila = $res->fetch_assoc();
+            if ($fila) {
+                $resultado = $fila;
+            }
+            $res->free();
+        }
+
+        // Cerrar statement y conexión
+        $stmt->close();
+        CerrarBD($dbConn);
+
+        // Devolver array asociativo o null
         return $resultado ?: null;
     }
 }
