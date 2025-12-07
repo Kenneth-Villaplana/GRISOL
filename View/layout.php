@@ -4,17 +4,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-/*
- * Ajusta esta constante según dónde viva tu app en Azure:
- *  - Si está en https://grisolcr.lat/OptiGestion/...  → '/OptiGestion'
- *  - Si está directamente en https://grisolcr.lat/... → '/'
- */
-define('BASE_URL', '/OptiGestion');      // <-- CAMBIA ESTO SI ES NECESARIO
-
-// URLs base para vistas y assets
-define('VIEW_URL',   BASE_URL . '/View');
-define('ASSETS_URL', BASE_URL . '/assets');
-
 function MostrarMenu() {
     $rol = $_SESSION['RolID'] ?? null;
     $EmpleadoRol = $_SESSION['EmpleadoRol'] ?? null;
@@ -22,19 +11,19 @@ function MostrarMenu() {
     echo '
     <nav class="navbar navbar-expand-lg navbar-dark bg-blue-dark">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="' . BASE_URL . '/index.php">Óptica Grisol</a>
+            <a class="navbar-brand" href="/index.php">Óptica Grisol</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-                    <li class="nav-item"><a class="nav-link" href="' . BASE_URL . '/index.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="' . VIEW_URL . '/about.php">Sobre Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="' . VIEW_URL . '/anteojos.php">Anteojos</a></li>';
+                    <li class="nav-item"><a class="nav-link" href="/index.php">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/View/about.php">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/View/anteojos.php">Anteojos</a></li>';
 
     if (!$rol) {
-        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="' . VIEW_URL . '/iniciarSesion.php">Iniciar Sesión</a></li>';
+        echo '<li class="nav-item ms-lg-3"><a class="nav-link" href="/View/iniciarSesion.php">Iniciar Sesión</a></li>';
     } 
     else if ($rol === 'Paciente') {
         echo '
@@ -43,9 +32,9 @@ function MostrarMenu() {
                 Citas
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownCitas">
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/appointmentForm.php">Agendar Cita</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/editarcita.php">Mis Citas</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/historialMedico.php">Historial Médico</a></li>
+                <li><a class="dropdown-item" href="/View/appointmentForm.php">Agendar Cita</a></li>
+                <li><a class="dropdown-item" href="/View/editarcita.php">Mis Citas</a></li>
+                <li><a class="dropdown-item" href="/View/historialMedico.php">Historial Médico</a></li>
             </ul>
         </li>';
     } 
@@ -58,7 +47,7 @@ function MostrarMenu() {
                     Personal
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPersonal">
-                    <li><a class="dropdown-item" href="' . VIEW_URL . '/personal.php">Ver Personal</a></li>
+                    <li><a class="dropdown-item" href="/View/personal.php">Ver Personal</a></li>
                 </ul>
             </li>';
         }
@@ -69,11 +58,11 @@ function MostrarMenu() {
                 Administración
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAdmin">
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/reportes.php">Reportes</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/inventario.php">Inventario</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/facturacion.php">Facturación</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/historialExpedientes.php">Historial de Expedientes</a></li>
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/editarcita.php">Manipular Citas</a></li>
+                <li><a class="dropdown-item" href="/View/reportes.php">Reportes</a></li>
+                <li><a class="dropdown-item" href="/View/inventario.php">Inventario</a></li>
+                <li><a class="dropdown-item" href="/View/facturacion.php">Facturación</a></li>
+                <li><a class="dropdown-item" href="/View/historialExpedientes.php">Historial de Expedientes</a></li>
+                <li><a class="dropdown-item" href="/View/editarcita.php">Manipular Citas</a></li>
             </ul>
         </li>';
     }
@@ -85,8 +74,8 @@ function MostrarMenu() {
                 Perfil
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPerfil">
-                <li><a class="dropdown-item" href="' . VIEW_URL . '/editarPerfil.php">Editar Perfil</a></li>
-                <li><a class="dropdown-item" href="' . BASE_URL . '/logout.php">Cerrar Sesión</a></li>
+                <li><a class="dropdown-item" href="/View/editarPerfil.php">Editar Perfil</a></li>
+                <li><a class="dropdown-item" href="/logout.php">Cerrar Sesión</a></li>
             </ul>
         </li>';
     }
@@ -149,30 +138,31 @@ function MostrarFooter() {
 
 function IncluirCSS() {
     echo '
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
 
-    <link rel="stylesheet" href="' . ASSETS_URL . '/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="' . ASSETS_URL . '/vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="' . ASSETS_URL . '/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="' . ASSETS_URL . '/vendor/glightbox/css/glightbox.min.css">
-    <link rel="stylesheet" href="' . ASSETS_URL . '/vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="' . ASSETS_URL . '/css/styles.css?v=5.8">
-    <link rel="icon" type="image/x-icon" href="' . ASSETS_URL . '/favicon.ico">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/assets/vendor/glightbox/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/vendor/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=5.8">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     ';
 }
 
 function IncluirScripts() {
     echo '
-    <script src="' . ASSETS_URL . '/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="' . ASSETS_URL . '/vendor/aos/aos.js"></script>
-    <script src="' . ASSETS_URL . '/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="' . ASSETS_URL . '/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="' . ASSETS_URL . '/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="' . ASSETS_URL . '/vendor/php-email-form/validate.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/assets/vendor/php-email-form/validate.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="' . ASSETS_URL . '/js/registro.js"></script>
-    <script src="' . ASSETS_URL . '/js/scripts.js"></script>
+    <script src="/assets/js/registro.js"></script>
+    <script src="/assets/js/scripts.js"></script>
     ';
 }
 
