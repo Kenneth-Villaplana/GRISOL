@@ -50,7 +50,7 @@ include('layout.php');
                         <td>Lentes recetados</td>
                         <td>Dr. Rodríguez</td>
                         <td>
-                            <a href="editarCita.php?id=2" class="btn btn-custom btn-outline-primary">
+                            <a href="EditarCita.php?id=2" class="btn btn-custom btn-outline-primary">
                                 <i class="bi bi-pencil-square"></i> Pendiente
                             </a>
                         </td>
@@ -78,7 +78,7 @@ include('layout.php');
     <td>Lentes recetados</td>
     <td>Dr. Rodríguez</td>
     <td>
-        <a href="editarCita.php?id=2" class="btn btn-custom btn-outline-primary">
+        <a href="EditarCita.php?id=2" class="btn btn-custom btn-outline-primary">
             <i class="bi bi-pencil-square"></i> Pendiente
         </a>
     </td>
@@ -114,7 +114,7 @@ include('layout.php');
     <td>Lentes recetados</td>
     <td>Dr. Rodríguez</td>
     <td>
-        <a href="editarCita.php?id=3" class="btn btn-custom btn-outline-primary">
+        <a href="EditarCita.php?id=3" class="btn btn-custom btn-outline-primary">
             <i class="bi bi-pencil-square"></i> Pendiente
         </a>
     </td>
