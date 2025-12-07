@@ -5,14 +5,15 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Configuración para Azure Web App
-define('BASE_URL', '/OptiGestion/');              // <-- CAMBIO
-define('ASSETS_PATH', BASE_URL . 'assets/');      // <-- CAMBIO
-define('VIEW_PATH', 'View/');     
+define('BASE_URL', '/');
+define('ASSETS_PATH', '/assets/');
+define('VIEW_PATH', '/View/');
 
 function getBasePath($path = '') {
-    // Construye rutas absolutas bajo /OptiGestion
+    // Para Azure, siempre usar rutas absolutas desde la raíz
     return BASE_URL . ltrim($path, '/');
 }
+
 function MostrarMenu() {
     $rol = $_SESSION['RolID'] ?? null;
     $EmpleadoRol = $_SESSION['EmpleadoRol'] ?? null;
