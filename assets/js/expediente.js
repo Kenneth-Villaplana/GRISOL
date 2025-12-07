@@ -17,7 +17,7 @@ async function buscarPaciente() {
     }
 
     try {
-        const response = await fetch('../Controller/pacienteController.php', {
+        const response = await fetch('/Controller/pacienteController.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'cedula=' + encodeURIComponent(cedula)
@@ -46,7 +46,7 @@ async function buscarPaciente() {
             btnAgregar.href = 'expedienteDigital.php';
             btnAgregar.style.display = 'block';
 
-            btnHistorial.href = `../Controller/historialExpedientePacienteController.php?PacienteId=${data.PacienteId}`;
+            btnHistorial.href = `/Controller/historialExpedientePacienteController.php?PacienteId=${data.PacienteId}`;
             btnHistorial.style.display = 'block';
         }
 
@@ -56,7 +56,7 @@ async function buscarPaciente() {
             btnAgregar.onclick = async (e) => {
                 e.preventDefault();
 
-                const res = await fetch('../Controller/pacienteController.php?action=crearPaciente', {
+                const res = await fetch('/Controller/pacienteController.php?action=crearPaciente', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: 'UsuarioId=' + data.UsuarioId
