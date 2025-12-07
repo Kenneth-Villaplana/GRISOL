@@ -1,8 +1,8 @@
 <?php
 session_start();
 include('layout.php');
-include_once __DIR__ . '/Model/baseDatos.php';
-require_once __DIR__ . '/vendor/autoload.php';
+include_once __DIR__ . '/../Model/baseDatos.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Verificar si el usuario está loggeado
 if (!isset($_SESSION['UsuarioID'])) {
@@ -11,7 +11,7 @@ if (!isset($_SESSION['UsuarioID'])) {
 }
 
 // INCLUIR LOS MODELOS NECESARIOS
-require_once __DIR__ . '/Model/GoogleCalendarModel.php';
+require_once __DIR__ . '/../Model/GoogleCalendarModel.php';
 
 $usuarioId = $_SESSION['UsuarioID'];
 $mensajeExito = '';
