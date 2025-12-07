@@ -1,4 +1,4 @@
-const PACIENTE_CONTROLLER = "/OptiGestion/Controller/pacienteController.php";
+const PACIENTE_CONTROLLER = "/Controller/pacienteController.php";
 
 
 async function buscarPaciente() {
@@ -17,11 +17,12 @@ async function buscarPaciente() {
     }
 
     try {
-        const response = await fetch('/Controller/pacienteController.php', {
+        const response = await fetch(PACIENTE_CONTROLLER, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'cedula=' + encodeURIComponent(cedula)
         });
+
 
         const data = await response.json();
 
