@@ -11,7 +11,7 @@ function MostrarMenu() {
     echo '
     <nav class="navbar navbar-expand-lg navbar-dark bg-blue-dark">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="/index.php">Óptica Grisol</a>
+            <a class="navbar-brand" href="index.php">Óptica Grisol</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>

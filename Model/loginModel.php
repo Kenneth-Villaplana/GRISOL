@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/Model/baseDatos.php';
+include_once __DIR__ . '/../Model/baseDatos.php';
 
 // Registrar Personal
 function RegistrarPersonalModel($cedula, $nombre, $apellido, $apellidoDos, $correoElectronico, $contrasenna, $telefono, $direccion, $rolId, $fechaNacimiento)
