@@ -811,7 +811,7 @@ CerrarBD($conn);
                     return;
                 }
             });
-            
+            //ocupo servir de esto para probar el modal de cancelar cita
             // Efectos visuales para los botones del modal
             const modalButtons = document.querySelectorAll('.btn-modal');
             modalButtons.forEach(button => {
