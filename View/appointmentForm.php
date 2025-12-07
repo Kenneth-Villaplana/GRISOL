@@ -17,7 +17,6 @@ $usuarioId = $_SESSION['UsuarioID'];
 $mensajeExito = '';
 $mensajeError = '';
 
-// [Todas las funciones PHP permanecen igual...]
 // Obtener información del usuario
 function obtenerUsuarioInfo($conn, $usuarioId) {
     $query = "SELECT u.*, p.PacienteId 
@@ -31,22 +30,28 @@ function obtenerUsuarioInfo($conn, $usuarioId) {
     return mysqli_fetch_assoc($result);
 }
 
-// Obtener todos los doctores
-function obtenerDoctores($conn) {
-    $query = "SELECT u.*, 'Profesional' as NombreRol 
+// ✅ Obtener únicamente doctores (usuarios con rolUsuario = 'Empleado')
+function obtenerDoctores($conn, $usuarioIdActual) {
+    // Ajusta este valor si en tu BD el rol se guarda distinto: 'empleado', 'Doctor', etc.
+    $rol = 'Empleado';
+
+    $query = "SELECT 
+                    u.*, 
+                    u.rolUsuario AS NombreRol
               FROM usuario u 
-              WHERE u.IdUsuario != ?";
-    
+              WHERE u.IdUsuario != ? 
+                AND u.rolUsuario = ?";
+
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION['UsuarioID']);
+    mysqli_stmt_bind_param($stmt, "is", $usuarioIdActual, $rol);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    
+
     $doctores = [];
     while ($row = mysqli_fetch_assoc($result)) {
         $doctores[] = $row;
     }
-    
+
     return $doctores;
 }
 
@@ -217,7 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Obtener datos para la vista
 $conn = AbrirBD();
 $usuarioInfo = obtenerUsuarioInfo($conn, $usuarioId);
-$doctores = obtenerDoctores($conn);
+// ✅ Pasamos el ID del usuario loggeado para excluirlo de la lista y filtrar rolUsuario
+$doctores = obtenerDoctores($conn, $usuarioId);
 CerrarBD($conn);
 ?>
 
